@@ -1,0 +1,2 @@
+module ErmitAppHelper
+end

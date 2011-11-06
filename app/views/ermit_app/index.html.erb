@@ -1,0 +1,21 @@
+<div id="main">
+	<div id="title">
+		ГРАФИЧЕСКАЯ ВИЗУАЛИЗАЦИЯ МНОГОЧЛЕНОВ ЭРМИТА. СОЗДАНИЕ WEB-ПРИЛОЖЕНИЯ, ИСПОЛЬЗУЯ ФРЕЙМВОРК RUBY ON RAILS
+	</div>
+	<div id="app">
+		<% if @chart %>
+			<div id='chart'></div>
+			<%= render_chart @chart, 'chart' %>
+		<% end %>
+		<p>Привет! Приложение создано для поиска многочлена Эрмита интересующей степени и его графического отображения.</p>
+		<p>И всего лишь ОДИН шаг отделяет Вас от ответа: введите интересующую степень <span id='joke'>(положительную, а то знаем вас;))</span> и нажмите "Посчитать"</p>
+		<%= form_tag( :action => "index") do %>
+			<div id='inputs'>
+				<%= text_field_tag(:power) %>
+			</div>
+			<div id='btn'>
+				<%= image_submit_tag("btn.png") %>
+			</div>
+		<% end %>
+	<div>
+</div>
