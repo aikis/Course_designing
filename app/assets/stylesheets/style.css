@@ -3,7 +3,7 @@ body{
 }
 #main{
 	position:relative;
-	margin:10% auto;
+	margin:0 auto;
 	width:800px;
 }
 #title{
@@ -21,14 +21,14 @@ body{
 	text-align:center;
 	box-shadow: 0 0 15px 5px #464A44;
 	font-size:20px;
-	font-family:Comic;
+	font-family:Comic, Arial;
 	border-radius:15px;
 }
 #joke{
 	font-size:9px;
 }
 #inputs{
-	position:relastive;
+	position:relative;
 	margin:0 auto;
 	background-color:#93968F;
 	margin-bottom:10px;
@@ -45,3 +45,6 @@ body{
 	margin:0 auto;
 	background-color:#93968F;
 }
+p[
+	margin: 20px;
+]

@@ -3,7 +3,7 @@ class ErmitAppController < ApplicationController
     if params[:power]
       table = GoogleVisualr::DataTable.new
       build! params[:power].to_i, table
-      option = { width: 750, height: 600, title: 'Yourth', backgroundColor: '#93968F' }
+      option = { width: 750, height: 480, backgroundColor: '#93968F', chartArea: {left:50,top:20,width:"95%",height:"90%"} }
       @chart = GoogleVisualr::Interactive::LineChart.new(table, option)
     end
   end
@@ -29,10 +29,7 @@ class ErmitAppController < ApplicationController
     e = ->arg do
       ans = 0
       ermit.each_with_index do |obj, i| 
-        p obj
-        p i
         ans += obj*(arg**i)
-        p ans
       end
       ans
     end
@@ -66,7 +63,7 @@ class ErmitAppController < ApplicationController
           h[i][j] = -(i-1)*h[i-2][j]
         end
       end
-      printit h[i]
+      # printit h[i]
     end
     h
   end
