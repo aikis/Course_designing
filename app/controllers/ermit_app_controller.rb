@@ -1,10 +1,12 @@
 class ErmitAppController < ApplicationController
   def index
-    if params[:power]
+    if params[:power] and params[:power].to_i >= 0 and params[:power].to_i < 300
       table = GoogleVisualr::DataTable.new
       build! params[:power].to_i, table
-      option = { width: 750, height: 480, backgroundColor: '#93968F', chartArea: {left:50,top:20,width:"95%",height:"90%"} }
+      option = { width: 780, height: 480, backgroundColor: '#93968F', chartArea: {left:70,top:20,width:"90%",height:"87%"} }
       @chart = GoogleVisualr::Interactive::LineChart.new(table, option)
+    elsif params[:power]
+      redirect_to :back, :notice => true
     end
   end
 
@@ -25,7 +27,7 @@ class ErmitAppController < ApplicationController
   
   def build!(n, table)
     h = init(n)
-    ermit = h[-1]
+    ermit = n == 0 ? h[0] : h[-1]
     e = ->arg do
       ans = 0
       ermit.each_with_index do |obj, i| 

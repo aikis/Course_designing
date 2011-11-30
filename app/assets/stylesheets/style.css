@@ -41,10 +41,10 @@ body{
 	box-shadow: 0 0 5px 2px #464A44;
 }
 #btn{
-	position:relastive;
+	position:relative;
 	margin:0 auto;
 	background-color:#93968F;
 }
-p[
-	margin: 20px;
-]
+p{
+	margin:20px;
+}
