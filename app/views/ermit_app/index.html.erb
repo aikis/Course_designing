@@ -18,7 +18,9 @@
 		<% end %>
 		<%= form_tag( {:action => "index"}, { :autocomplete => :off }) do %>
 			<div id='inputs'>
-				<%= text_field_tag(:power) %>
+				<%= text_field_tag(:power) %><br>
+				<%= check_box_tag(:all) %>
+				<%= label_tag(:all, "Вывести все") %>
 			</div>
 			<div id='btn'>
 				<%= image_submit_tag("btn.png") %>

@@ -1,8 +1,10 @@
 class ErmitAppController < ApplicationController
   def index
     if params[:power] and params[:power].to_i >= 0 and params[:power].to_i < 300
+      all = params[:all] ? params[:all] : nil
       table = GoogleVisualr::DataTable.new
-      build! params[:power].to_i, table
+      n = params[:power].to_i
+      build! n, table, all
       option = { width: 780, height: 480, backgroundColor: '#93968F', chartArea: {left:70,top:20,width:"90%",height:"87%"} }
       @chart = GoogleVisualr::Interactive::LineChart.new(table, option)
     elsif params[:power]
@@ -10,32 +12,48 @@ class ErmitAppController < ApplicationController
     end
   end
 
-  def line_chart!(table, ermit, e)
+  def line_chart!(table, e)
     x0 = -5
     len = 10.0
     n = 100
     table.new_column('string', 'X')
-    table.new_column('number', 'Y')
+    e.size.times do |i|
+      table.new_column('number', 'Y' + i.to_s)
+    end
     table.add_rows(n+1)
     interval = len/n
     (0..n).each do |i|
       x = x0 + i*interval
       table.set_cell(i, 0, x.to_s)
-      table.set_cell(i, 1, e.call(x))
+      e.each_with_index { |el, j| table.set_cell(i, j+1, el.call(x)) }
     end
   end
   
-  def build!(n, table)
+  def build!(n, table, all)
     h = init(n)
-    ermit = n == 0 ? h[0] : h[-1]
-    e = ->arg do
-      ans = 0
-      ermit.each_with_index do |obj, i| 
-        ans += obj*(arg**i)
+    e = []
+    if all
+      (0..n).each do |i|
+        ermit = n == 0 ? h[0] : h[i]
+        e[i] = ->arg do
+          ans = 0
+          ermit.each_with_index do |obj, i| 
+            ans += obj*(arg**i)
+          end
+          ans
+        end
       end
-      ans
+    else
+      ermit = n == 0 ? h[0] : h[-1]
+      e[0] = ->arg do
+        ans = 0
+        ermit.each_with_index do |obj, i| 
+          ans += obj*(arg**i)
+        end
+        ans
+      end
     end
-    line_chart! table, ermit, e
+    line_chart! table, e
   end
 
   def printit(a)
