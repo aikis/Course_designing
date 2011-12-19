@@ -4,7 +4,7 @@ class ErmitAppController < ApplicationController
       all = params[:all] ? params[:all] : nil
       table = GoogleVisualr::DataTable.new
       n = params[:power].to_i
-      build! n, table, all
+      @s = build! n, table, all
       option = { width: 780, height: 480, backgroundColor: '#93968F', chartArea: {left:70,top:20,width:"90%",height:"87%"} }
       @chart = GoogleVisualr::Interactive::LineChart.new(table, option)
     elsif params[:power]
@@ -12,9 +12,12 @@ class ErmitAppController < ApplicationController
     end
   end
 
+  def theory
+  end
+
   def line_chart!(table, e)
-    x0 = -5
-    len = 10.0
+    x0 = -2
+    len = 4.0
     n = 100
     table.new_column('string', 'X')
     e.size.times do |i|
@@ -32,9 +35,11 @@ class ErmitAppController < ApplicationController
   def build!(n, table, all)
     h = init(n)
     e = []
+    s = []
     if all
       (0..n).each do |i|
         ermit = n == 0 ? h[0] : h[i]
+        s << printit(ermit)
         e[i] = ->arg do
           ans = 0
           ermit.each_with_index do |obj, i| 
@@ -45,6 +50,7 @@ class ErmitAppController < ApplicationController
       end
     else
       ermit = n == 0 ? h[0] : h[-1]
+      s << printit(ermit)
       e[0] = ->arg do
         ans = 0
         ermit.each_with_index do |obj, i| 
@@ -54,12 +60,21 @@ class ErmitAppController < ApplicationController
       end
     end
     line_chart! table, e
+    s
   end
 
   def printit(a)
-    (a.length - 1).downto(1) { |n| print "(#{a[n]})x^#{n} + " if a[n] != 0 }
-    print "(#{a[0]})" if a[0] != 0
-    puts
+    s = ""
+    (a.length - 1).downto(2) do |n| 
+      s += "+ " if a[n] > 0 and n != a.length - 1
+      s += a[n].to_s + "x^" + n.to_s + " " if a[n] != 0 and a[n] != 1
+      s += "x^" + n.to_s + " " if a[n] != 0 and a[n] == 1
+    end
+    s += "+ " if a[1] > 0 
+    s += a[1].to_s + "x" + " " if a[1] != 0 
+    s += "+ " if a[0] > 0
+    s += a[0].to_s if a[0] != 0
+    p s
   end
 
   def inits(n)
